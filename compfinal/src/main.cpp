@@ -78,10 +78,20 @@ void usercontrol(void) {
     }
 
     // Drivetrain code for joysticks
+    int forward = Controller1.Axis3.position(vex::percent);
+    int sideways = Controller1.Axis4.position(vex::percent);
+    int turn = Controller1.Axis1.position(vex::percent);
+
+    MotorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
+    MotorLF.spin(vex::forward,  forward + sideways - turn, vex::percent);
+    MotorRB.spin(vex::forward,  forward + sideways + turn, vex::percent);
+    MotorLB.spin(vex::forward,   forward - sideways - turn, vex::percent);
+    /*
     MotorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct) * maxSpeedPct,velocityUnits::pct);
     MotorRB.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct) * maxSpeedPct,velocityUnits::pct);
     MotorLF.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct) * maxSpeedPct,velocityUnits::pct);
     MotorRF.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct) * maxSpeedPct, velocityUnits::pct);
+    */
 
     // Auxillerary systems for reminding the driver with vibrations
     if (Brain.Battery.capacity() < 15) {
