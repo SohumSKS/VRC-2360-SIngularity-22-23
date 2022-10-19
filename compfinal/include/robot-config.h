@@ -12,5 +12,6 @@ extern motor ArmR;
 extern motor Claw;
 extern motor ArmB;
 extern inertial imu;
+extern digital_out DigitalOutA;
 
 void  vexcodeInit( void );
