@@ -78,14 +78,14 @@ void usercontrol(void) {
     }
 
     // Drivetrain code for joysticks
-    int forward = Controller1.Axis3.position(vex::percent);
-    int sideways = -Controller1.Axis4.position(vex::percent);
-    int turn = Controller1.Axis1.position(vex::percent);
+    int turn = (Controller1.Axis3.position(vex::percent) * maxSpeedPct);
+    int sideways = (Controller1.Axis4.position(vex::percent)* maxSpeedPct);
+    int forward = -(Controller1.Axis1.position(vex::percent) * maxSpeedPct);
 
     MotorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
-    MotorLF.spin(vex::forward,  forward + sideways - turn, vex::percent);
+    MotorLF.spin(vex::forward,  forward - sideways - turn, vex::percent);
     MotorRB.spin(vex::forward,  forward + sideways + turn, vex::percent);
-    MotorLB.spin(vex::forward,  forward - sideways - turn, vex::percent);
+    MotorLB.spin(vex::forward,  forward + sideways - turn, vex::percent);
     /*
     MotorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct) * maxSpeedPct,velocityUnits::pct);
     MotorRB.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct) * maxSpeedPct,velocityUnits::pct);
