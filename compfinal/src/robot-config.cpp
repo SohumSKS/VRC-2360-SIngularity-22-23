@@ -19,7 +19,8 @@ motor ArmB = motor(PORT14, ratio36_1);
 inertial imu = inertial(PORT13);
 motor Claw = motor(PORT21, ratio18_1, true);
 motor_group arm = motor_group(ArmL, ArmR);
-digital_out DigitalOutA = digital_out(Brain.ThreeWirePort.A);
+digital_out indexer = digital_out( Brain.ThreeWirePort.A );
+
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
