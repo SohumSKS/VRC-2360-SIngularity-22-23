@@ -8,6 +8,7 @@ extern motor MotorLF;
 extern motor MotorRB;
 extern motor MotorRF;
 extern motor ArmL;
+extern motor string;
 extern motor ArmR;
 extern motor Claw;
 extern motor ArmB;

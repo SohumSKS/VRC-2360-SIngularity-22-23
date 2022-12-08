@@ -17,6 +17,7 @@ motor ArmL = motor(PORT4, ratio36_1, false);
 motor ArmR = motor(PORT2, ratio36_1, true);
 motor ArmB = motor(PORT14, ratio36_1);
 inertial imu = inertial(PORT13);
+motor string = motor(PORT21, ratio36_1, true);
 motor Claw = motor(PORT21, ratio18_1, true);
 motor_group arm = motor_group(ArmL, ArmR);
 digital_out indexer = digital_out( Brain.ThreeWirePort.A );

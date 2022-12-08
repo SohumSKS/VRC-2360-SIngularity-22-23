@@ -24,13 +24,13 @@ void autonomous(void) { // auton
   const float P = 0.6;
   const float I = 0.4;
   const float D = 0.18;
-  driveOnPID(55, 200, 0.55, I, D);
+  //driveOnPID(55, 200, 0.55, I, D);
   // move(3.9, 80);
   // move(0.35, 20);
-  Claw.setVelocity(100, percentUnits::pct);
-  Claw.spinFor(-360, rotationUnits::deg, true);
+  //Claw.setVelocity(100, percentUnits::pct);
+  //Claw.spinFor(-360, rotationUnits::deg, true);
   // move(-3, 50);
-  driveOnPID(-40, 200, P, I, D);
+  //driveOnPID(-40, 200, P, I, D);
   // 0.15 50hold
 }
 
@@ -59,9 +59,12 @@ void usercontrol(void) {
     if (Controller1.ButtonR1.pressing()) {
       ArmL.spin(directionType::fwd, 100, velocityUnits::pct);
       ArmR.spin(directionType::fwd, 100, velocityUnits::pct);
+      string.spin(directionType::fwd, 100, velocityUnits::pct);
     } else if (Controller1.ButtonR2.pressing()) {
       ArmL.spin(directionType::rev, 100, velocityUnits::pct);
       ArmR.spin(directionType::rev, 100, velocityUnits::pct);
+      string.spin(directionType::rev, 100, velocityUnits::pct);
+
     } /* else if (Controller1.ButtonL2.pressing()) {
       Claw.spin(directionType::rev, 100, velocityUnits::pct);
     }*/
