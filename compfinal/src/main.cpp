@@ -82,6 +82,8 @@ void usercontrol(void) {
       ArmL.stop(hold);
       accel = 1;
       ArmR.stop(hold);
+      string.stop(hold);
+
       ArmB.stop(hold);
       Claw.stop(hold);
     }
