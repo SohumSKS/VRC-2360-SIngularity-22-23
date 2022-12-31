@@ -22,7 +22,7 @@ motor fly2 = motor(PORT6, ratio6_1, true);
 motor_group arm = motor_group(fly1, fly2);
 
 digital_out indexer = digital_out( Brain.ThreeWirePort.A );
-digital_out stringShooter = digital_out( Brain.ThreeWirePort.A );
+digital_out stringShooter = digital_out( Brain.ThreeWirePort.B );
 inertial imu = inertial(PORT13);
 
 // VEXcode generated functions
