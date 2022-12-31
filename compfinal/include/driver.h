@@ -59,11 +59,9 @@ void snailmode() {
 }
 */
 void extraSnail() { //slowest switchable mode
-  if (Claw.position(degrees) > 60) {
     Controller1.Screen.clearScreen();
     Controller1.Screen.setCursor(0, 0);
     Controller1.Screen.print("EXTRA snail mode");
     maxSpeedPct = 0.25;
-  }
 }
 #endif

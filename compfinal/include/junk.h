@@ -29,15 +29,15 @@ void gyroTurnPID(double referenceHeading, double kp, double ki,double kd) {
       integralSum = integralSum + (error * (double)period.value());
       double output = clip((kp * error) + (ki * integralSum) + (kd * derivative), -1, 1);
 
-      MotorLF.setVelocity(100 * output, velocityUnits::pct);
-      MotorLB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRF.setVelocity(100 * output, velocityUnits::pct);
+      motorLF.setVelocity(100 * output, velocityUnits::pct);
+      motorLB.setVelocity(100 * output, velocityUnits::pct);
+      motorRB.setVelocity(100 * output, velocityUnits::pct);
+      motorRF.setVelocity(100 * output, velocityUnits::pct);
 
-      MotorLF.spin(directionType::rev);
-      MotorRF.spin(directionType::fwd);
-      MotorLB.spin(directionType::rev);
-      MotorRB.spin(directionType::fwd);
+      motorLF.spin(directionType::rev);
+      motorRF.spin(directionType::fwd);
+      motorLB.spin(directionType::rev);
+      motorRB.spin(directionType::fwd);
 
       lastError = error;
       Controller1.Screen.clearScreen();
@@ -55,15 +55,15 @@ void gyroTurnPID(double referenceHeading, double kp, double ki,double kd) {
       integralSum = integralSum + (error * (double)period.value());
       double output = clip((kp * error) + (ki * integralSum) + (kd * derivative), -1, 1);
 
-      MotorLF.setVelocity(100 * output, velocityUnits::pct);
-      MotorLB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRF.setVelocity(100 * output, velocityUnits::pct);
+      motorLF.setVelocity(100 * output, velocityUnits::pct);
+      motorLB.setVelocity(100 * output, velocityUnits::pct);
+      motorRB.setVelocity(100 * output, velocityUnits::pct);
+      motorRF.setVelocity(100 * output, velocityUnits::pct);
 
-      MotorLF.spin(directionType::fwd);
-      MotorRF.spin(directionType::rev);
-      MotorLB.spin(directionType::fwd);
-      MotorRB.spin(directionType::rev);
+      motorLF.spin(directionType::fwd);
+      motorRF.spin(directionType::rev);
+      motorLB.spin(directionType::fwd);
+      motorRB.spin(directionType::rev);
 
       lastError = error;
       Controller1.Screen.clearScreen();
@@ -81,10 +81,10 @@ double angleCalc(double requestedAngle){
 void gyroTurn(double referenceHeading, int veloc) {
   double imuHeading = imu.angle(rotationUnits::deg);
   // Set speeds of both Drive motors
-  MotorLF.setVelocity(veloc, velocityUnits::pct);
-  MotorLB.setVelocity(veloc, velocityUnits::pct);
-  MotorRB.setVelocity(veloc, velocityUnits::pct);
-  MotorRF.setVelocity(veloc, velocityUnits::pct);
+  motorLF.setVelocity(veloc, velocityUnits::pct);
+  motorLB.setVelocity(veloc, velocityUnits::pct);
+  motorRB.setVelocity(veloc, velocityUnits::pct);
+  motorRF.setVelocity(veloc, velocityUnits::pct);
 
   // Prints the referenceHeading for debugging puroses to ensure that it is
   // going for the right degree amount
@@ -92,10 +92,10 @@ void gyroTurn(double referenceHeading, int veloc) {
   // While loop to do the spin
   if (referenceHeading < 0) {
     while (imuHeading <= referenceHeading) {
-      MotorLF.spin(directionType::rev);
-      MotorRF.spin(directionType::fwd);
-      MotorLB.spin(directionType::rev);
-      MotorRB.spin(directionType::fwd);
+      motorLF.spin(directionType::rev);
+      motorRF.spin(directionType::fwd);
+      motorLB.spin(directionType::rev);
+      motorRB.spin(directionType::fwd);
       Controller1.Screen.clearScreen();
       Controller1.Screen.print(imu.angle(rotationUnits::deg));
       this_thread::sleep_for(10);
@@ -103,10 +103,10 @@ void gyroTurn(double referenceHeading, int veloc) {
 
   } else {
     while (imuHeading <= referenceHeading) {
-      MotorLF.spin(directionType::fwd);
-      MotorRF.spin(directionType::rev);
-      MotorLB.spin(directionType::fwd);
-      MotorRB.spin(directionType::rev);
+      motorLF.spin(directionType::fwd);
+      motorRF.spin(directionType::rev);
+      motorLB.spin(directionType::fwd);
+      motorRB.spin(directionType::rev);
       Controller1.Screen.clearScreen();
       Controller1.Screen.print(imu.angle(rotationUnits::deg));
       this_thread::sleep_for(10);
@@ -118,38 +118,38 @@ void gyroTurn(double referenceHeading, int veloc) {
   imu.setHeading(0, rotationUnits::deg);
 }
 void move(double revs, double power) {
-  MotorLB.setVelocity(power, velocityUnits::pct);
-  MotorLF.setVelocity(power, velocityUnits::pct);
-  MotorRB.setVelocity(power, velocityUnits::pct);
-  MotorRF.setVelocity(power, velocityUnits::pct);
+  motorLB.setVelocity(power, velocityUnits::pct);
+  motorLF.setVelocity(power, velocityUnits::pct);
+  motorRB.setVelocity(power, velocityUnits::pct);
+  motorRF.setVelocity(power, velocityUnits::pct);
 
-  MotorLB.spinFor(revs, rotationUnits::rev, false);
-  MotorLF.spinFor(revs, rotationUnits::rev, false);
-  MotorRB.spinFor(revs, rotationUnits::rev, false);
-  MotorRF.spinFor(revs, rotationUnits::rev, true);
+  motorLB.spinFor(revs, rotationUnits::rev, false);
+  motorLF.spinFor(revs, rotationUnits::rev, false);
+  motorRB.spinFor(revs, rotationUnits::rev, false);
+  motorRF.spinFor(revs, rotationUnits::rev, true);
 }
 void moveIn(double inches, int poder) {
   double revs = inches / (4.000 * M_PI);
-  MotorLB.setVelocity(poder, velocityUnits::pct);
-  MotorLF.setVelocity(poder, velocityUnits::pct);
-  MotorRB.setVelocity(poder, velocityUnits::pct);
-  MotorRF.setVelocity(poder, velocityUnits::pct);
+  motorLB.setVelocity(poder, velocityUnits::pct);
+  motorLF.setVelocity(poder, velocityUnits::pct);
+  motorRB.setVelocity(poder, velocityUnits::pct);
+  motorRF.setVelocity(poder, velocityUnits::pct);
 
-  MotorLB.spinFor(revs, rotationUnits::rev, false);
-  MotorLF.spinFor(revs, rotationUnits::rev, false);
-  MotorRB.spinFor(revs, rotationUnits::rev, false);
-  MotorRF.spinFor(revs, rotationUnits::rev, true);
+  motorLB.spinFor(revs, rotationUnits::rev, false);
+  motorLF.spinFor(revs, rotationUnits::rev, false);
+  motorRB.spinFor(revs, rotationUnits::rev, false);
+  motorRF.spinFor(revs, rotationUnits::rev, true);
 }
 void balance(double power){
   while(imu.pitch(rotationUnits::deg) > 5 || imu.pitch(rotationUnits::deg) < -5){
-    MotorLB.setVelocity(power, velocityUnits::pct);
-    MotorLF.setVelocity(power, velocityUnits::pct);
-    MotorRB.setVelocity(power, velocityUnits::pct);
-    MotorRF.setVelocity(power, velocityUnits::pct);
-    MotorLF.spin(directionType::fwd);
-    MotorRF.spin(directionType::fwd);
-    MotorLB.spin(directionType::fwd);
-    MotorRB.spin(directionType::fwd);
+    motorLB.setVelocity(power, velocityUnits::pct);
+    motorLF.setVelocity(power, velocityUnits::pct);
+    motorRB.setVelocity(power, velocityUnits::pct);
+    motorRF.setVelocity(power, velocityUnits::pct);
+    motorLF.spin(directionType::fwd);
+    motorRF.spin(directionType::fwd);
+    motorLB.spin(directionType::fwd);
+    motorRB.spin(directionType::fwd);
   }
   driveStop(true);
 }
@@ -157,26 +157,26 @@ void turnNoIMU(double referenceHeading, double power, double kp, double ki, doub
   double lastError = 0;
   float integralSum = 0;
   timer period = timer();
-  MotorLF.resetRotation();
+  motorLF.resetRotation();
   if (referenceHeading < 0) {
-    while ((double)MotorLB.rotation(rotationUnits::rev) <= (double)angleCalc(referenceHeading)) {
+    while ((double)motorLB.rotation(rotationUnits::rev) <= (double)angleCalc(referenceHeading)) {
       period.reset();
       double error;
-      double imuHeading = MotorLB.rotation(rotationUnits::rev);
+      double imuHeading = motorLB.rotation(rotationUnits::rev);
       error = referenceHeading - imuHeading;
       double derivative = (error - lastError) / (double)period.value();
       integralSum = integralSum + (error * (double)period.value());
       double output = clip((kp * error) + (ki * integralSum) + (kd * derivative), -1, 1);
 
-      MotorLF.setVelocity(100 * output, velocityUnits::pct);
-      MotorLB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRF.setVelocity(100 * output, velocityUnits::pct);
+      motorLF.setVelocity(100 * output, velocityUnits::pct);
+      motorLB.setVelocity(100 * output, velocityUnits::pct);
+      motorRB.setVelocity(100 * output, velocityUnits::pct);
+      motorRF.setVelocity(100 * output, velocityUnits::pct);
 
-      MotorLF.spin(directionType::rev);
-      MotorRF.spin(directionType::fwd);
-      MotorLB.spin(directionType::rev);
-      MotorRB.spin(directionType::fwd);
+      motorLF.spin(directionType::rev);
+      motorRF.spin(directionType::fwd);
+      motorLB.spin(directionType::rev);
+      motorRB.spin(directionType::fwd);
 
       lastError = error;
       Controller1.Screen.clearScreen();
@@ -185,7 +185,7 @@ void turnNoIMU(double referenceHeading, double power, double kp, double ki, doub
     }
   }
    else {
-    while ((double)MotorLB.rotation(rotationUnits::rev) >= (double)angleCalc(referenceHeading)){
+    while ((double)motorLB.rotation(rotationUnits::rev) >= (double)angleCalc(referenceHeading)){
       period.reset();
       double error;
       double imuHeading = imu.angle(rotationUnits::deg);
@@ -194,15 +194,15 @@ void turnNoIMU(double referenceHeading, double power, double kp, double ki, doub
       integralSum = integralSum + (error * (double)period.value());
       double output = clip((kp * error) + (ki * integralSum) + (kd * derivative), -1, 1);
 
-      MotorLF.setVelocity(100 * output, velocityUnits::pct);
-      MotorLB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRB.setVelocity(100 * output, velocityUnits::pct);
-      MotorRF.setVelocity(100 * output, velocityUnits::pct);
+      motorLF.setVelocity(100 * output, velocityUnits::pct);
+      motorLB.setVelocity(100 * output, velocityUnits::pct);
+      motorRB.setVelocity(100 * output, velocityUnits::pct);
+      motorRF.setVelocity(100 * output, velocityUnits::pct);
 
-      MotorLF.spin(directionType::fwd);
-      MotorRF.spin(directionType::rev);
-      MotorLB.spin(directionType::fwd);
-      MotorRB.spin(directionType::rev);
+      motorLF.spin(directionType::fwd);
+      motorRF.spin(directionType::rev);
+      motorLB.spin(directionType::fwd);
+      motorRB.spin(directionType::rev);
 
       lastError = error;
       Controller1.Screen.clearScreen();
@@ -215,24 +215,24 @@ void turnNoIMU(double referenceHeading, double power, double kp, double ki, doub
 
 void turnAngle(double angle, double poder){
   if (angle > 0){
-    MotorLF.rotateTo((double)angleCalc(angle), rotationUnits::rev, poder, velocityUnits::pct, false);
-    MotorRF.rotateTo((double)angleCalc(angle) , rotationUnits::rev, -poder, velocityUnits::pct, false);
-    MotorLB.rotateTo((double)angleCalc(angle), rotationUnits::rev, poder, velocityUnits::pct, false);
-    MotorRB.rotateTo((double)angleCalc(angle) , rotationUnits::rev, -poder, velocityUnits::pct, true);
+    motorLF.rotateTo((double)angleCalc(angle), rotationUnits::rev, poder, velocityUnits::pct, false);
+    motorRF.rotateTo((double)angleCalc(angle) , rotationUnits::rev, -poder, velocityUnits::pct, false);
+    motorLB.rotateTo((double)angleCalc(angle), rotationUnits::rev, poder, velocityUnits::pct, false);
+    motorRB.rotateTo((double)angleCalc(angle) , rotationUnits::rev, -poder, velocityUnits::pct, true);
   }
   else if(angle < 0){
-    MotorLF.rotateTo((double)angleCalc(angle), rotationUnits::rev, -poder, velocityUnits::pct, false);
-    MotorRF.rotateTo((double)angleCalc(angle) , rotationUnits::rev, poder, velocityUnits::pct, false);
-    MotorLB.rotateTo((double)angleCalc(angle), rotationUnits::rev, -poder, velocityUnits::pct, false);
-    MotorRB.rotateTo((double)angleCalc(angle) , rotationUnits::rev, poder, velocityUnits::pct, true);
+    motorLF.rotateTo((double)angleCalc(angle), rotationUnits::rev, -poder, velocityUnits::pct, false);
+    motorRF.rotateTo((double)angleCalc(angle) , rotationUnits::rev, poder, velocityUnits::pct, false);
+    motorLB.rotateTo((double)angleCalc(angle), rotationUnits::rev, -poder, velocityUnits::pct, false);
+    motorRB.rotateTo((double)angleCalc(angle) , rotationUnits::rev, poder, velocityUnits::pct, true);
   }
   driveStop(true);
 }
 
 void moveInches(double inches, double poder){
-  MotorLF.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, false);
-  MotorRF.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, false);
-  MotorLB.rotateTo((inches / (4 * M_PI)), rotationUnits::rev, poder, velocityUnits::pct, false);
-  MotorRB.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, true);
+  motorLF.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, false);
+  motorRF.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, false);
+  motorLB.rotateTo((inches / (4 * M_PI)), rotationUnits::rev, poder, velocityUnits::pct, false);
+  motorRB.rotateTo((inches / (4 * M_PI)) , rotationUnits::rev, poder, velocityUnits::pct, true);
 }
 #endif

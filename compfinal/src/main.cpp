@@ -24,13 +24,13 @@ void autonomous(void) { // auton
   const float P = 0.6;
   const float I = 0.4;
   const float D = 0.18;
-  //driveOnPID(55, 200, 0.55, I, D);
+  // driveOnPID(55, 200, 0.55, I, D);
   // move(3.9, 80);
   // move(0.35, 20);
-  //Claw.setVelocity(100, percentUnits::pct);
-  //Claw.spinFor(-360, rotationUnits::deg, true);
+  // Claw.setVelocity(100, percentUnits::pct);
+  // Claw.spinFor(-360, rotationUnits::deg, true);
   // move(-3, 50);
-  //driveOnPID(-40, 200, P, I, D);
+  // driveOnPID(-40, 200, P, I, D);
   // 0.15 50hold
 }
 
@@ -41,15 +41,15 @@ void usercontrol(void) {
   timer Timer = timer(); // start timer for reminding the driver of time
   Timer.reset();
   float accel = 1;
-  motor allMotors[] = {
-      MotorLB, MotorLF, MotorRB, MotorRF, ArmL,
-      ArmR,    ArmB,    Claw}; // check temps for overheating to fix an issue
+  motor allmotors[] = {
+      motorLB, motorLF, motorRB, motorRF, intakeB,
+      intakeF, fly1,    fly2}; // check temps for overheating to fix an issue
   int i = 0;
-  for (motor myMotor : allMotors) {
-    if (myMotor.installed())
+  for (motor mymotor : allmotors) {
+    if (mymotor.installed())
       continue;
-    if (myMotor.temperature(fahrenheit) > 90) {
-      Controller1.Screen.print("Motor %d overheating!", i);
+    if (mymotor.temperature(fahrenheit) > 90) {
+      Controller1.Screen.print("motor %d overheating!", i);
       Controller1.rumble(".....");
       break;
     }
@@ -57,35 +57,34 @@ void usercontrol(void) {
   }
   while (1) { // drivercontrol functions
     if (Controller1.ButtonR1.pressing()) {
-      ArmL.spin(directionType::fwd, 100, velocityUnits::pct);
-      ArmR.spin(directionType::fwd, 100, velocityUnits::pct);
-      string.spin(directionType::fwd, 100, velocityUnits::pct);
-    } else if (Controller1.ButtonR2.pressing()) {
-      ArmL.spin(directionType::rev, 100, velocityUnits::pct);
-      ArmR.spin(directionType::rev, 100, velocityUnits::pct);
-      string.spin(directionType::rev, 100, velocityUnits::pct);
-
-    } /* else if (Controller1.ButtonL2.pressing()) {
-      Claw.spin(directionType::rev, 100, velocityUnits::pct);
-    }*/
-    else if (Controller1.ButtonL1.pressing()) {
+      fly1.spin(directionType::fwd, 100, velocityUnits::pct);
+      fly2.spin(directionType::fwd, 100, velocityUnits::pct);
+    } 
+    else if (Controller1.ButtonR2.pressing()) {
       indexer.set(true);
       wait(150, msec);
       indexer.set(false);
       wait(150, msec);
-    } else if (Controller1.ButtonX.pressing()) {
-      ArmB.spin(directionType::rev, 100 * maxSpeedPct, velocityUnits::pct);
+    } 
+    else if (Controller1.ButtonL2.pressing()) {
+      intakeB.spin(directionType::fwd, 100, velocityUnits::pct);
+      intakeF.spin(directionType::fwd, 100, velocityUnits::pct);
+    } 
+    else if (Controller1.ButtonL1.pressing()) {
+      intakeB.spin(directionType::fwd, 100, velocityUnits::pct);
+    } 
+    else if (Controller1.ButtonX.pressing()) {
+      stringShooter.set(true);
       // accel -= 0.1;
-    } else if (Controller1.ButtonB.pressing()) {
-      ArmB.spin(directionType::fwd, 100 * maxSpeedPct, velocityUnits::pct);
-    } else {
-      ArmL.stop(hold);
+    } 
+    /*else if (Controller1.ButtonB.pressing()) {
+    } */
+    else {
       accel = 1;
-      ArmR.stop(hold);
-      string.stop(hold);
-
-      ArmB.stop(hold);
-      Claw.stop(hold);
+      intakeF.stop(hold);
+      intakeB.stop(hold);
+      fly1.stop();
+      fly2.stop();
     }
 
     // Drivetrain code for joysticks
@@ -93,18 +92,18 @@ void usercontrol(void) {
     int sideways = (Controller1.Axis4.position(vex::percent) * maxSpeedPct);
     int forward = -(Controller1.Axis1.position(vex::percent) * maxSpeedPct);
 
-    MotorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
-    MotorLF.spin(vex::forward, forward - sideways - turn, vex::percent);
-    MotorRB.spin(vex::forward, forward + sideways + turn, vex::percent);
-    MotorLB.spin(vex::forward, forward + sideways - turn, vex::percent);
+    motorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
+    motorLF.spin(vex::forward, forward - sideways - turn, vex::percent);
+    motorRB.spin(vex::forward, forward + sideways + turn, vex::percent);
+    motorLB.spin(vex::forward, forward + sideways - turn, vex::percent);
     /*
-    MotorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
+    motorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
     * maxSpeedPct,velocityUnits::pct);
-    MotorRB.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct)
+    motorRB.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct)
     * maxSpeedPct,velocityUnits::pct);
-    MotorLF.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
+    motorLF.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
     * maxSpeedPct,velocityUnits::pct);
-    MotorRF.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct)
+    motorRF.spin(directionType::fwd,Controller1.Axis2.position(percentUnits::pct)
     * maxSpeedPct, velocityUnits::pct);
     */
 

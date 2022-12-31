@@ -14,31 +14,31 @@
 using namespace vex;
 void driveStop(bool holding){
   if(holding){
-    MotorRB.stop(hold);
-    MotorLB.stop(hold);
-    MotorLF.stop(hold);
-    MotorRF.stop(hold);
+    motorRB.stop(hold);
+    motorLB.stop(hold);
+    motorLF.stop(hold);
+    motorRF.stop(hold);
   }
   else{
-    MotorRB.stop();
-    MotorLB.stop();
-    MotorLF.stop();
-    MotorRF.stop();
+    motorRB.stop();
+    motorLB.stop();
+    motorLF.stop();
+    motorRF.stop();
   }
 }
 
 void setDriveVelocity(float velocity) {
-  MotorLF.setVelocity(velocity, velocityUnits::pct);
-  MotorLB.setVelocity(velocity, velocityUnits::pct);
-  MotorRB.setVelocity(velocity, velocityUnits::pct);
-  MotorRF.setVelocity(velocity, velocityUnits::pct);
+  motorLF.setVelocity(velocity, velocityUnits::pct);
+  motorLB.setVelocity(velocity, velocityUnits::pct);
+  motorRB.setVelocity(velocity, velocityUnits::pct);
+  motorRF.setVelocity(velocity, velocityUnits::pct);
 }
 void driveCorrection(float velocity, int dir){
   setDriveVelocity(velocity);
-  MotorRF.spinTo(-0.1, rotationUnits::rev, false);
-  MotorRB.spinTo(-0.1, rotationUnits::rev, false);
-  MotorLF.spinTo(0.1, rotationUnits::rev, false);
-  MotorLB.spinTo(0.1, rotationUnits::rev, true);
+  motorRF.spinTo(-0.1, rotationUnits::rev, false);
+  motorRB.spinTo(-0.1, rotationUnits::rev, false);
+  motorLF.spinTo(0.1, rotationUnits::rev, false);
+  motorLB.spinTo(0.1, rotationUnits::rev, true);
 }
 
 double clip(double number, double min, double max) {
@@ -109,10 +109,10 @@ void turnOnPID(double gyroRequestedValue, double MaxspeedinRPM) { //no params fo
       breakSwitch = false;
     }
 
-    MotorRF.spin(vex::directionType::rev, (powerValue), vex::velocityUnits::rpm); //spin motors to output var
-    MotorLF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm); //always equal to or lower than max speed specified
-    MotorRB.spin(vex::directionType::rev, (powerValue), vex::velocityUnits::rpm);
-    MotorLB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
+    motorRF.spin(vex::directionType::rev, (powerValue), vex::velocityUnits::rpm); //spin motors to output var
+    motorLF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm); //always equal to or lower than max speed specified
+    motorRB.spin(vex::directionType::rev, (powerValue), vex::velocityUnits::rpm);
+    motorLB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
     lastgyroError = gyroError; //set the last error for loop iteration
     wait(10, vex::timeUnits::msec); //wait for no wasted resources
   }
@@ -122,7 +122,7 @@ void turnOnPID(double gyroRequestedValue, double MaxspeedinRPM) { //no params fo
 }
 
 void driveOnPID(double distance, double MaxspeedinRPM, float kP, float kI, float kD) { 
-  MotorRB.resetRotation();
+  motorRB.resetRotation();
   float degs = (distance / (4 * M_PI)) * 360;
   float encoderValue;
   float error;
@@ -138,7 +138,7 @@ void driveOnPID(double distance, double MaxspeedinRPM, float kP, float kI, float
   int TimeExit = 0;
   double Threshold = 2.5;
   while (1) {
-    encoderValue = MotorRB.rotation(vex::rotationUnits::deg);
+    encoderValue = motorRB.rotation(vex::rotationUnits::deg);
     Brain.Screen.setCursor(3, 1);
     error = degs - encoderValue;
 
@@ -171,10 +171,10 @@ void driveOnPID(double distance, double MaxspeedinRPM, float kP, float kI, float
       Drive = -MaxspeedinRPM;
     }
     int powerValue = Drive;
-    MotorRF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
-    MotorLF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
-    MotorRB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
-    MotorLB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
+    motorRF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
+    motorLF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
+    motorRB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
+    motorLB.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm);
     lastError = error;
     wait(10, vex::timeUnits::msec);
   }
