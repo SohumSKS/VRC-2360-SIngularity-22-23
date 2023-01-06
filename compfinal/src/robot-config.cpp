@@ -10,19 +10,19 @@ brain  Brain;
 // VEXcode device constructors
 controller Controller1 = controller(primary);
 motor motorLB = motor(PORT16, ratio18_1, true);
-motor motorLF = motor(PORT18, ratio18_1, true);
+motor motorLF = motor(PORT20, ratio18_1, true);
 motor motorRB = motor(PORT17, ratio18_1, true);
 motor motorRF = motor(PORT19, ratio18_1, true);
 
 motor intakeF = motor(PORT1, ratio18_1, false);
-motor intakeB = motor(PORT2, ratio18_1, false);
+motor intakeB = motor(PORT15, ratio18_1, false);
 
-motor fly1 = motor(PORT4, ratio6_1, false);
-motor fly2 = motor(PORT6, ratio6_1, true);
+motor fly1 = motor(PORT11, ratio6_1, true);
+motor fly2 = motor(PORT12, ratio6_1, false);
 motor_group arm = motor_group(fly1, fly2);
 
-digital_out indexer = digital_out( Brain.ThreeWirePort.A );
-digital_out stringShooter = digital_out( Brain.ThreeWirePort.B );
+digital_out indexer = digital_out( Brain.ThreeWirePort.B );
+digital_out stringShooter = digital_out( Brain.ThreeWirePort.A );
 inertial imu = inertial(PORT13);
 
 // VEXcode generated functions

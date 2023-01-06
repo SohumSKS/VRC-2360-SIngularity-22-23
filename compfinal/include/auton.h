@@ -50,6 +50,8 @@ double clip(double number, double min, double max) {
   return number;
 }
 
+
+
 void turnOnPID(double gyroRequestedValue, double MaxspeedinRPM) { //no params for PID consts
   float gyroSensorCurrentValue; //current sensor value for IMU
   float dir;
@@ -108,6 +110,7 @@ void turnOnPID(double gyroRequestedValue, double MaxspeedinRPM) { //no params fo
       }
       breakSwitch = false;
     }
+
 
     motorRF.spin(vex::directionType::rev, (powerValue), vex::velocityUnits::rpm); //spin motors to output var
     motorLF.spin(vex::directionType::fwd, (powerValue), vex::velocityUnits::rpm); //always equal to or lower than max speed specified
@@ -179,5 +182,109 @@ void driveOnPID(double distance, double MaxspeedinRPM, float kP, float kI, float
     wait(10, vex::timeUnits::msec);
   }
   driveStop(true);
+}
+
+
+
+void rightAngle(){
+  int ninety = 90;
+  double remainder = (int(imu.rotation(vex::rotationUnits::deg)) % ninety);
+  turnOnPID(imu.rotation(vex::rotationUnits::deg) - remainder, 100);
+}
+
+
+void strafeOnPID(double distance, double MaxspeedinRPM, float kP, float kI, float kD) { 
+  motorRB.resetRotation();
+  float degs = (distance / (4 * M_PI)) * 360;
+  float encoderValue;
+  float error;
+  float Drive;
+  float lastError;
+  float P;
+  float D;
+
+  const float Kp = kP;
+  const float Ki = kI;
+  const float Kd = kD;
+
+  int TimeExit = 0;
+  double Threshold = 2.5;
+  while (1) {
+    encoderValue = motorRB.rotation(vex::rotationUnits::deg);
+    Brain.Screen.setCursor(3, 1);
+    error = degs - encoderValue;
+
+    if (error < Threshold and error > -Threshold) {
+      break;
+    } else if (TimeExit == 10000) {
+      Brain.Screen.clearScreen();
+      driveStop(true);
+      break;
+    } else {
+      TimeExit = 0;
+    }
+
+    P = (Kp * error);
+    static float I = 0;
+    I += error * Ki;
+    if (I > 1) {
+      I = 1;
+    }
+    if (I < -1) {
+      I = -1;
+    }
+    D = (error - lastError) * Kd;
+    Drive = P + I + D;
+
+    if (Drive > MaxspeedinRPM) {
+      Drive = MaxspeedinRPM;
+    }
+    if (Drive < -MaxspeedinRPM) {
+      Drive = -MaxspeedinRPM;
+    }
+    int powerValue = Drive;
+
+    int sideways = powerValue;
+
+    motorRF.spin(vex::forward, - sideways, vex::velocityUnits::rpm);
+    motorLF.spin(vex::forward, - sideways, vex::velocityUnits::rpm);
+    motorRB.spin(vex::forward, sideways, vex::velocityUnits::rpm);
+    motorLB.spin(vex::forward, sideways, vex::velocityUnits::rpm);
+
+    lastError = error;
+    wait(10, vex::timeUnits::msec);
+  }
+  driveStop(true);
+}
+
+void shoot(int quantity, bool prefly) {
+  if (!prefly) {
+    fly1.spin(directionType::fwd, 100, percentUnits::pct);
+    fly2.spin(directionType::fwd, 100, percentUnits::pct);
+    wait(4000, timeUnits::msec);
+  }
+
+  while (quantity >= 1){
+    indexer.set(true);
+    wait(150, timeUnits::msec);
+    indexer.set(false);
+    wait(400, timeUnits::msec);
+
+    quantity--;
+  }
+  if(!prefly){
+    fly1.stop();
+    fly2.stop();
+  }
+}
+
+void fly(bool state){
+  if (state){
+    fly1.spin(directionType::fwd, 100, percentUnits::pct);
+    fly2.spin(directionType::fwd, 100, percentUnits::pct);
+  } else {
+    fly1.stop();
+    fly2.stop();
+  }
 }
 #endif

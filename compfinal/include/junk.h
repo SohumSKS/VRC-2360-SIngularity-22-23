@@ -126,7 +126,7 @@ void move(double revs, double power) {
   motorLB.spinFor(revs, rotationUnits::rev, false);
   motorLF.spinFor(revs, rotationUnits::rev, false);
   motorRB.spinFor(revs, rotationUnits::rev, false);
-  motorRF.spinFor(revs, rotationUnits::rev, true);
+  motorRF.spinFor(revs, rotationUnits::rev, false);
 }
 void moveIn(double inches, int poder) {
   double revs = inches / (4.000 * M_PI);
