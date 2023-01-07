@@ -26,14 +26,14 @@ void autonomous(void) { // auton
   const float D = 0.18;
   
   //wait(10000, timeUnits::msec);
-  strafeOnPID(24, 100, P, I, D);
+  strafeOnPID(-24, 100, P, I, D);
   driveOnPID(4, 200, P, I, D);
   intakeB.spinFor(directionType::fwd, 0.8, rotationUnits::rev, true);
   driveOnPID(-5, 200, P, I, D);
-  turnOnPID(-115, 200);
+  turnOnPID(155, 200);
   fly(true);
   driveOnPID(41, 200, P, I, D);
-  turnOnPID(-35, 200);
+  turnOnPID(35, 200);
   shoot(3, true);
   fly(false); 
 }
