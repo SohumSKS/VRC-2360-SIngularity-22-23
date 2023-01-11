@@ -24,23 +24,24 @@ void autonomous(void) { // auton
   const float P = 0.6;
   const float I = 0.4;
   const float D = 0.18;
-  
-  //wait(10000, timeUnits::msec);
-  strafeOnPID(-24, 100, P, I, D);
-  driveOnPID(4, 200, P, I, D);
-  intakeB.spinFor(directionType::fwd, 0.8, rotationUnits::rev, true);
+
+  // wait(10000, timeUnits::msec);
+
+  strafeOnPID(-30, 100, P, I, D);
+  driveOnPID(5, 200, P, I, D);
+  intakeB.spinFor(directionType::fwd, 1.5, rotationUnits::rev, true);
   driveOnPID(-5, 200, P, I, D);
   turnOnPID(155, 200);
   fly(true);
   driveOnPID(41, 200, P, I, D);
-  turnOnPID(35, 200);
-  shoot(3, true);
-  fly(false); 
+  turnOnPID(-45, 200);
+  shoot(2, true);
+  fly(false);
 }
 
 void usercontrol(void) {
   stringShooter.set(false);
-  Controller1.ButtonUp.pressed(rightAngle);
+  //Controller1.ButtonUp.pressed(rightAngle);
   Controller1.ButtonA.pressed(nitroboost); // assigning all switchable modes
   Controller1.ButtonY.pressed(snailmode);
 
@@ -65,13 +66,12 @@ void usercontrol(void) {
     i++;
   }
 
-  fly1.setVelocity(100, percentUnits::pct);
-  fly2.setVelocity(100, percentUnits::pct);
-
   while (1) { // drivercontrol functions
     if (Controller1.ButtonR2.pressing()) {
       indexer.set(true);
     } else if (Controller1.ButtonR1.pressing()) {
+      fly1.setVelocity(42, percentUnits::pct);
+      fly2.setVelocity(42, percentUnits::pct);
       fly1.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
       fly2.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
     } else if (Controller1.ButtonL1.pressing()) {
@@ -82,12 +82,11 @@ void usercontrol(void) {
     } else if (Controller1.ButtonB.pressing()) {
       fly1.stop();
       fly2.stop();
-    } else if (Controller1.ButtonX.pressing()) {
+    } else if (Controller1.ButtonX.pressing() && Controller1.ButtonUp.pressing()) {
       stringShooter.set(true);
     } else if (Controller1.ButtonDown.pressing()) {
       intakeF.spin(directionType::rev, 100, percentUnits::pct);
-    } 
-     else {
+    } else {
       accel = 1;
       indexer.set(false);
       intakeF.stop();
@@ -95,8 +94,10 @@ void usercontrol(void) {
     }
     // Drivetrain code for joysticks
     int turn = (output(Controller1.Axis3.position(vex::percent)) * maxSpeedPct);
-    int sideways = (output(Controller1.Axis4.position(vex::percent)) * maxSpeedPct);
-    int forward = -(output(Controller1.Axis1.position(vex::percent)) * maxSpeedPct);
+    int sideways =
+        (output(Controller1.Axis4.position(vex::percent)) * maxSpeedPct);
+    int forward =
+        -(output(Controller1.Axis1.position(vex::percent)) * maxSpeedPct);
 
     motorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
     motorLF.spin(vex::forward, forward - sideways - turn, vex::percent);
@@ -126,14 +127,14 @@ void usercontrol(void) {
     }
     int timeRemaining = 105 - (int)Timer.value(); // 1 min 45 sec for the match
 
-    
-    if ((timeRemaining <= 5 && timeRemaining > 0) || timeRemaining == 10) { // vibrate the controller
+    if ((timeRemaining <= 5 && timeRemaining > 0) ||
+        timeRemaining == 10) { // vibrate the controller
       Controller1.rumble(".");
       Controller1.Screen.clearScreen();
       Controller1.Screen.setCursor(0, 0);
       Controller1.Screen.print("%d sec left", timeRemaining);
     }
-    
+
     task::sleep(20); // Sleep the task for a short amount of time to prevent
                      // wasted resources.
   }
