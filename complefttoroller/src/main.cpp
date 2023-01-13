@@ -40,8 +40,10 @@ void autonomous(void) { // auton
 }
 
 void usercontrol(void) {
-  stringShooter.set(false);
-  //Controller1.ButtonUp.pressed(rightAngle);
+  stringShooter1.set(false);
+  stringShooter2.set(false);
+
+  // Controller1.ButtonUp.pressed(rightAngle);
   Controller1.ButtonA.pressed(nitroboost); // assigning all switchable modes
   Controller1.ButtonY.pressed(snailmode);
 
@@ -65,7 +67,7 @@ void usercontrol(void) {
     }
     i++;
   }
-
+  bool intakeState = false;
   while (1) { // drivercontrol functions
     if (Controller1.ButtonR2.pressing()) {
       indexer.set(true);
@@ -74,6 +76,7 @@ void usercontrol(void) {
       fly2.setVelocity(42, percentUnits::pct);
       fly1.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
       fly2.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
+      intakeState = true;
     } else if (Controller1.ButtonL1.pressing()) {
       intakeB.spin(directionType::fwd, 100, velocityUnits::pct);
     } else if (Controller1.ButtonL2.pressing()) {
@@ -82,16 +85,30 @@ void usercontrol(void) {
     } else if (Controller1.ButtonB.pressing()) {
       fly1.stop();
       fly2.stop();
-    } else if (Controller1.ButtonX.pressing() && Controller1.ButtonUp.pressing()) {
-      stringShooter.set(true);
+    } else if (Controller1.ButtonX.pressing() &&
+               Controller1.ButtonUp.pressing()) {
+      stringShooter1.set(true);
+      motorRF.spinTo(-0.4, rotationUnits::rev, false);
+      motorRB.spinTo(-0.4, rotationUnits::rev, false);
+      motorLF.spinTo(0.4, rotationUnits::rev, false);
+      motorLB.spinTo(0.4, rotationUnits::rev, true);
+      stringShooter2.set(true);
+
     } else if (Controller1.ButtonDown.pressing()) {
       intakeF.spin(directionType::rev, 100, percentUnits::pct);
     } else {
       accel = 1;
+      if (intakeState == true) {
+        Controller1.Screen.clearScreen();
+        Controller1.Screen.setCursor(0, 0);
+        Controller1.Screen.print(fly1.velocity(rpm) * 11.6666); // 84 12 60 36
+      }
       indexer.set(false);
       intakeF.stop();
       intakeB.stop();
+      intakeState = false;
     }
+
     // Drivetrain code for joysticks
     int turn = (output(Controller1.Axis3.position(vex::percent)) * maxSpeedPct);
     int sideways =

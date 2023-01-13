@@ -13,6 +13,7 @@ extern motor fly1;
 extern motor fly2;
 extern inertial imu;
 extern digital_out indexer;
-extern digital_out stringShooter;
+extern digital_out stringShooter1;
+extern digital_out stringShooter2;
 
 void  vexcodeInit( void );

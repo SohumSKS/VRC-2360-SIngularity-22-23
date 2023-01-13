@@ -279,6 +279,8 @@ void shoot(int quantity, bool prefly) {
 }
 
 void fly(bool state){
+  fly1.setVelocity(42, percentUnits::pct);
+  fly2.setVelocity(42, percentUnits::pct);
   if (state){
     fly1.spin(directionType::fwd, 100, percentUnits::pct);
     fly2.spin(directionType::fwd, 100, percentUnits::pct);
