@@ -87,6 +87,10 @@ void usercontrol(void) {
     } else if (Controller1.ButtonX.pressing() &&
                Controller1.ButtonUp.pressing()) {
       stringShooter1.set(true);
+      motorRF.spinTo(-0.4, rotationUnits::rev, false);
+      motorRB.spinTo(-0.4, rotationUnits::rev, false);
+      motorLF.spinTo(0.4, rotationUnits::rev, false);
+      motorLB.spinTo(0.4, rotationUnits::rev, true);
       stringShooter2.set(true);
 
     } else if (Controller1.ButtonDown.pressing()) {
