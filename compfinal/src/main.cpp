@@ -28,7 +28,7 @@ void autonomous(void) { // auton
   // wait(10000, timeUnits::msec);
   // strafeOnPID(30, 100, P, I, D);
   driveOnPID(5, 200, P, I, D);
-  intakeB.spinFor(directionType::fwd, 0.8, rotationUnits::rev, true);
+  intakeB.spinFor(directionType::fwd, -1.75, rotationUnits::rev, true);
   driveOnPID(-5, 200, P, I, D);
   /*turnOnPID(-115, 200);
   fly(true);
@@ -71,8 +71,8 @@ void usercontrol(void) {
     if (Controller1.ButtonR2.pressing()) {
       indexer.set(true);
     } else if (Controller1.ButtonR1.pressing()) {
-      fly1.setVelocity(42, percentUnits::pct);
-      fly2.setVelocity(42, percentUnits::pct);
+      fly1.setVelocity(52, percentUnits::pct);
+      fly2.setVelocity(52, percentUnits::pct);
       fly1.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
       fly2.spinFor(directionType::fwd, 10000, rotationUnits::rev, false);
       intakeState = true;
@@ -87,10 +87,9 @@ void usercontrol(void) {
     } else if (Controller1.ButtonX.pressing() &&
                Controller1.ButtonUp.pressing()) {
       stringShooter1.set(true);
-      motorRF.spinTo(-0.4, rotationUnits::rev, false);
-      motorRB.spinTo(-0.4, rotationUnits::rev, false);
-      motorLF.spinTo(0.4, rotationUnits::rev, false);
-      motorLB.spinTo(0.4, rotationUnits::rev, true);
+      motorRF.spinTo(1, rotationUnits::rev, true);
+        driveStop(false);
+
       stringShooter2.set(true);
 
     } else if (Controller1.ButtonDown.pressing()) {
@@ -106,19 +105,35 @@ void usercontrol(void) {
       intakeF.stop();
       intakeB.stop();
       intakeState = false;
+      driveStop(true);
     }
 
     // Drivetrain code for joysticks
+    /*
     int turn = (output(Controller1.Axis3.position(vex::percent)) * maxSpeedPct);
     int sideways =
         (output(Controller1.Axis4.position(vex::percent)) * maxSpeedPct);
     int forward =
         -(output(Controller1.Axis1.position(vex::percent)) * maxSpeedPct);
 
+
     motorRF.spin(vex::forward, forward - sideways + turn, vex::percent);
     motorLF.spin(vex::forward, forward - sideways - turn, vex::percent);
     motorRB.spin(vex::forward, forward + sideways + turn, vex::percent);
     motorLB.spin(vex::forward, forward + sideways - turn, vex::percent);
+    
+*/
+    float CH1 = ((Controller1.Axis1.position(vex::percent)) * maxSpeedPct);
+    float CH3 = ((Controller1.Axis3.position(vex::percent)) * maxSpeedPct);
+    float CH4 = ((Controller1.Axis4.position(vex::percent)) * maxSpeedPct);
+
+    motorRF.spin(vex::forward, CH3 - CH1 - CH4 , vex::percent);
+    motorLF.spin(vex::forward, CH3 + CH1 + CH4, vex::percent);
+    motorRB.spin(vex::forward, CH3 - CH1 + CH4, vex::percent);
+    motorLB.spin(vex::forward, CH3 + CH1 - CH4, vex::percent);
+    
+    
+
     /*
     motorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
     * maxSpeedPct,velocityUnits::pct);

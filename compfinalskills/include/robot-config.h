@@ -3,14 +3,17 @@ using namespace vex;
 extern brain Brain;
 
 extern controller Controller1;
-extern motor MotorLB;
-extern motor MotorLF;
-extern motor MotorRB;
-extern motor MotorRF;
-extern motor ArmL;
-extern motor ArmR;
-extern motor Claw;
-extern motor ArmB;
+extern motor motorLB;
+extern motor motorLF;
+extern motor motorRB;
+extern motor motorRF;
+extern motor intakeF;
+extern motor intakeB;
+extern motor fly1;
+extern motor fly2;
 extern inertial imu;
+extern digital_out indexer;
+extern digital_out stringShooter1;
+extern digital_out stringShooter2;
 
 void  vexcodeInit( void );

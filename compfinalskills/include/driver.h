@@ -10,23 +10,33 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 #include <vex_competition.h>
+#include <math.h>
 
 using namespace vex;
 
+float output(float input) {
+  float output;
+  if (input < 50) {
+    output = input / 2;
+  } else if (input > -50){
+    output = input/2;
+  }
+  return output;
+}
 
-float maxSpeedPct = 1;
+float maxSpeedPct = 0.8;
 bool toggle = false;
 void nitroboost() { // Switchable mode
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(0, 0);
   if (maxSpeedPct == 1) {
-    maxSpeedPct = 0.8;
+    maxSpeedPct = 0.75;
     Controller1.rumble("..");
-    Controller1.Screen.print("NORMAL SPEED");
+    Controller1.Screen.print("REG");
   } else {
     maxSpeedPct = 1;
-    Controller1.rumble("...");
-    Controller1.Screen.print("MAX SPEED");
+    Controller1.rumble("__");
+    Controller1.Screen.print("MAX");
   }
 }
 
@@ -34,15 +44,17 @@ void snailmode() {
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(0, 0);
   if (maxSpeedPct == 0.5) {
-    maxSpeedPct = 0.8;
+    maxSpeedPct = 0.75;
     Controller1.rumble("..");
-    Controller1.Screen.print("NORMAL");
+    Controller1.Screen.print("REG");
   } else {
-    maxSpeedPct = 0.5;
+    maxSpeedPct = 0.4;
     Controller1.rumble(".");
-    Controller1.Screen.print("SLOW");
+    Controller1.Screen.print("MIN");
   }
 }
+
+
  /* void toggleonoff(){ //toggle to keep the claw engaged while lifting
   if(toggle){
     toggle = false;
@@ -59,11 +71,9 @@ void snailmode() {
 }
 */
 void extraSnail() { //slowest switchable mode
-  if (Claw.position(degrees) > 60) {
     Controller1.Screen.clearScreen();
     Controller1.Screen.setCursor(0, 0);
     Controller1.Screen.print("EXTRA snail mode");
     maxSpeedPct = 0.25;
-  }
 }
 #endif

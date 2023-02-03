@@ -29,14 +29,9 @@ void autonomous(void) { // auton
 
   strafeOnPID(-30, 100, P, I, D);
   driveOnPID(5, 200, P, I, D);
-  intakeB.spinFor(directionType::fwd, 1.5, rotationUnits::rev, true);
+  intakeB.spinFor(directionType::fwd, -1.75, rotationUnits::rev, true);
   driveOnPID(-5, 200, P, I, D);
-  turnOnPID(155, 200);
-  fly(true);
-  driveOnPID(41, 200, P, I, D);
-  turnOnPID(-45, 200);
-  shoot(2, true);
-  fly(false);
+
 }
 
 void usercontrol(void) {
@@ -88,8 +83,8 @@ void usercontrol(void) {
     } else if (Controller1.ButtonX.pressing() &&
                Controller1.ButtonUp.pressing()) {
       stringShooter1.set(true);
-      motorRF.spinTo(-0.4, rotationUnits::rev, false);
-      motorRB.spinTo(-0.4, rotationUnits::rev, false);
+      motorRF.spinTo(0.4, rotationUnits::rev, false);
+      motorRB.spinTo(0.4, rotationUnits::rev, false);
       motorLF.spinTo(0.4, rotationUnits::rev, false);
       motorLB.spinTo(0.4, rotationUnits::rev, true);
       stringShooter2.set(true);
