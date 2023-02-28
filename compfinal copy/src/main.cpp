@@ -27,9 +27,24 @@ void autonomous(void) { // auton
 
   // wait(10000, timeUnits::msec);
   // strafeOnPID(30, 100, P, I, D);
-  driveOnPID(5, 200, P, I, D);
-  intakeB.spinFor(directionType::fwd, -1.75, rotationUnits::rev, true);
-  driveOnPID(-5, 200, P, I, D);
+  driveOnPID(4, 150, P, I, D);
+  intakeB.spinFor(directionType::fwd, -0.875, rotationUnits::rev, true);
+  driveOnPID(-18, 150, P, I, D);
+  turnOnPID(90, 120);
+
+  driveOnPID(25, 150, P, I, D);
+  intakeB.spinFor(directionType::fwd, -0.875, rotationUnits::rev, true);
+  intakeF.spinFor(directionType::fwd, 2.75, rotationUnits::rev, true);
+
+  driveOnPID(-18, 150, P, I, D);
+  fly(true);
+  wait(1500, msec);
+  shoot(3, true);
+  fly(false);
+  turnOnPID(225, 150);
+  stringShooter1.set(true);
+  stringShooter2.set(true);
+
   /*turnOnPID(-115, 200);
   fly(true);
   driveOnPID(41, 200, P, I, D);
@@ -118,18 +133,16 @@ void usercontrol(void) {
     motorLF.spin(vex::forward, forward - sideways - turn, vex::percent);
     motorRB.spin(vex::forward, forward + sideways + turn, vex::percent);
     motorLB.spin(vex::forward, forward + sideways - turn, vex::percent);
-    
+
 */
     float CH1 = ((Controller1.Axis1.position(vex::percent)) * maxSpeedPct);
     float CH3 = ((Controller1.Axis3.position(vex::percent)) * maxSpeedPct);
     float CH4 = ((Controller1.Axis4.position(vex::percent)) * maxSpeedPct);
 
-    motorRF.spin(vex::forward, CH3 - CH1 - CH4 , vex::percent);
+    motorRF.spin(vex::forward, CH3 - CH1 - CH4, vex::percent);
     motorLF.spin(vex::forward, CH3 + CH1 + CH4, vex::percent);
     motorRB.spin(vex::forward, CH3 - CH1 + CH4, vex::percent);
     motorLB.spin(vex::forward, CH3 + CH1 - CH4, vex::percent);
-    
-    
 
     /*
     motorLB.spin(directionType::fwd,Controller1.Axis3.position(percentUnits::pct)
